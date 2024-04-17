@@ -14,7 +14,7 @@ import 'provider/provider.dart';
 import 'settings/key_store.dart';
 import 'ui/my_app.dart';
 
-HID hid = HID(idVendor: 1155, idProduct: 22352);
+HID hid = HID(idVendor: 1149, idProduct: 22349);
 late Uint8List rawData;
 final container = ProviderContainer();
 

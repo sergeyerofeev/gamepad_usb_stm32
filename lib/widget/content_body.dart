@@ -44,7 +44,8 @@ class ContentBodyState extends State<ContentBody> with TickerProviderStateMixin 
           if (hid.open() == 0) {
             Future(() async {
               int result = await hid.write(Globals.createDataForTransfer(leftX, leftY, rightX, rightY));
-              if (result == 0) {
+              // Если функция вернула -1, произошёл разрыв соединения
+              if (result == -1) {
                 hid.close();
                 hidOpen();
               }
