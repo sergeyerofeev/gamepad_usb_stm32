@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -16,7 +15,6 @@ import 'ui/my_app.dart';
 
 HID hid = HID(idVendor: 1149, idProduct: 22349);
 late Uint8List rawData;
-final container = ProviderContainer();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,23 +54,9 @@ void main() async {
   });
 
   runApp(ProviderScope(
-    parent: container,
     overrides: [
       storageProvider.overrideWithValue(MyStorage(sharedPreferences)),
     ],
     child: const MyApp(),
   ));
-
-  Timer(Duration.zero, hidOpen);
-}
-
-// Пытаемся подключиться к usb устройству
-void hidOpen() {
-  if (hid.open() != 0) {
-    Timer.periodic(const Duration(seconds: 10), (timer) {
-      if (hid.open() == 0) {
-        timer.cancel();
-      }
-    });
-  }
 }

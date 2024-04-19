@@ -4,3 +4,6 @@ import '../data/data_sources/i_data_base.dart';
 
 // Провайдер хранилища данных
 final storageProvider = Provider<IDataBase>((ref) => throw UnimplementedError());
+
+// Провайдер состояния подключения USB
+final hidProvider = StateProvider.autoDispose<bool>((ref) => false);

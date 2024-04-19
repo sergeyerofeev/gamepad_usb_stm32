@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gamepad_usb_stm32/data/globals.dart';
 import 'package:gamepad_usb_stm32/widget/joystick_view.dart';
 
 import '../gamepad/gamepad.dart';
 import '../main.dart';
+import '../provider/provider.dart';
 
-class ContentBody extends StatefulWidget {
+class ContentBody extends ConsumerStatefulWidget {
   const ContentBody({super.key});
 
   @override
-  ContentBodyState createState() => ContentBodyState();
+  ConsumerState<ContentBody> createState() => _ContentBodyState();
 }
 
-class ContentBodyState extends State<ContentBody> with TickerProviderStateMixin {
+class _ContentBodyState extends ConsumerState<ContentBody> with TickerProviderStateMixin {
   late final Gamepad gamepad;
   late final AnimationController _controller =
       AnimationController(vsync: this, duration: const Duration(seconds: 1))..repeat();
@@ -44,10 +46,10 @@ class ContentBodyState extends State<ContentBody> with TickerProviderStateMixin 
           if (hid.open() == 0) {
             Future(() async {
               int result = await hid.write(Globals.createDataForTransfer(leftX, leftY, rightX, rightY));
-              // Если функция вернула -1, произошёл разрыв соединения
+              // Если функция hid.write() вернула -1, произошёл разрыв соединения
               if (result == -1) {
                 hid.close();
-                hidOpen();
+                ref.read(hidProvider.notifier).update((_) => false);
               }
             });
           }

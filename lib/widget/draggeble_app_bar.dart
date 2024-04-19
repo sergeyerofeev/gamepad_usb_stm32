@@ -10,6 +10,8 @@ class DraggebleAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    bool isHidConnect = ref.watch(hidProvider);
+
     return Container(
       decoration: const BoxDecoration(
         color: Color(0xB2F8F8F8),
@@ -34,6 +36,13 @@ class DraggebleAppBar extends ConsumerWidget implements PreferredSizeWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  SizedBox(
+                    width: 46,
+                    height: kWindowCaptionHeight,
+                    child: isHidConnect
+                        ? const Icon(Icons.usb, size: 18.0, color: Colors.green)
+                        : const Icon(Icons.usb_off, size: 18.0, color: Colors.red),
+                  ),
                   WindowCaptionButton.minimize(
                     onPressed: () async {
                       bool isMinimized = await windowManager.isMinimized();
