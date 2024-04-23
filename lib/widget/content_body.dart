@@ -5,7 +5,6 @@ import 'package:gamepad_usb_stm32/widget/joystick_view.dart';
 
 import '../gamepad/gamepad.dart';
 import '../main.dart';
-import '../provider/provider.dart';
 
 class ContentBody extends ConsumerStatefulWidget {
   const ContentBody({super.key});
@@ -44,13 +43,10 @@ class _ContentBodyState extends ConsumerState<ContentBody> with TickerProviderSt
         // Отправляем изменённые данные
         if (Globals.isChange(leftX, leftY, rightX, rightY)) {
           if (hid.open() == 0) {
-            Future(() async {
-              int result = await hid.write(Globals.createDataForTransfer(leftX, leftY, rightX, rightY));
-              // Если функция hid.write() вернула -1, произошёл разрыв соединения
-              if (result == -1) {
-                hid.close();
-                ref.read(hidProvider.notifier).update((_) => false);
-              }
+            Future.microtask(() async {
+              // Отправляем данные, не важно какой результат вернёт функция hid.white()
+              // Разрыв соединения уже ослеживается при выполнении hid.open()
+              await hid.write(Globals.createDataForTransfer(leftX, leftY, rightX, rightY));
             });
           }
         }

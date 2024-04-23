@@ -26,10 +26,12 @@ class _MyAppState extends ConsumerState<MyApp> {
         int hidConnect = hid.open();
         bool hidStatus = ref.read(hidProvider);
         if (hidConnect == 0 && !hidStatus) {
-          // Установим статус поключения
+          // Установим статус поключения, true - связь с устройством установлена
           ref.read(hidProvider.notifier).update((_) => true);
         } else if (hidConnect != 0 && hidStatus) {
+          // В случае разрыва связи, закрываем текущий hid
           hid.close();
+          // Устанавливаем статус в false
           ref.read(hidProvider.notifier).update((_) => false);
         }
       });
